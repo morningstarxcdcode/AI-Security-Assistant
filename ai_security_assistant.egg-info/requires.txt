@@ -1,0 +1,9 @@
+flask
+pyyaml
+requests
+reportlab
+matplotlib
+numpy
+scikit-learn
+discord-webhook
+python-telegram-bot

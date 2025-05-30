@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Security Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        h1 { color: #222; }
+        nav { margin-bottom: 30px; }
+        nav a { margin-right: 20px; color: #007bff; text-decoration: none; font-weight: bold; cursor: pointer; }
+        nav a.active { text-decoration: underline; color: #0056b3; }
+        section { display: none; max-width: 800px; }
+        section.active { display: block; }
+        form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; max-width: 600px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        textarea, input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+        button { margin-top: 20px; padding: 10px 20px; border: none; background: #007bff; color: #fff; border-radius: 4px; cursor: pointer; }
+        #result { margin-top: 30px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+        .code-block { background: #222; color: #eee; padding: 10px; border-radius: 4px; font-family: monospace; white-space: pre; }
+        .help { font-size: 0.95em; color: #555; margin-bottom: 10px; }
+        .try-example { float: right; background: #28a745; }
+        .plugin-list, .report-list, .notification-settings, .monitoring-settings, .settings-panel { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; margin-top: 10px; }
+        .plugin-list ul, .report-list ul { padding-left: 20px; }
+    </style>
+</head>
+<body>
+    <h1>AI Security Assistant</h1>
+    <nav>
+        <a id="nav-scan" class="active" onclick="showSection('scan')">Scan</a>
+        <a id="nav-plugins" onclick="showSection('plugins')">Plugins</a>
+        <a id="nav-reports" onclick="showSection('reports')">Reports</a>
+        <a id="nav-notifications" onclick="showSection('notifications')">Notifications</a>
+        <a id="nav-monitoring" onclick="showSection('monitoring')">Monitoring</a>
+        <a id="nav-settings" onclick="showSection('settings')">Settings</a>
+    </nav>
+    <section id="section-scan" class="active">
+        <form id="promptForm">
+            <button type="button" class="try-example" onclick="fillExample()">Try Example</button>
+            <div class="help">Fill out the fields below to generate security scripts or analysis. Hover over each field for tips.</div>
+            <label for="instructions" title="Describe the AI's persona and role.">Instructions (AI Persona & Role):</label>
+            <textarea id="instructions" name="instructions" rows="2" required placeholder="e.g. You are an expert ethical hacker..."></textarea>
+
+            <label for="context" title="Provide recon data, HTTP requests, or other context.">Context (Recon Data, HTTP, etc.):</label>
+            <textarea id="context" name="context" rows="3" placeholder="e.g. Target: https://example.com ..."></textarea>
+
+            <label for="goals" title="Describe the vulnerability or action to focus on.">Goals (What to Achieve):</label>
+            <textarea id="goals" name="goals" rows="2" placeholder="e.g. Generate a Python script to test for IDOR..."></textarea>
+
+            <label for="constraints" title="Specify output format and requirements.">Constraints & Output Format:</label>
+            <textarea id="constraints" name="constraints" rows="2" placeholder="e.g. Output only the executable Python code..."></textarea>
+
+            <button type="submit">Submit Prompt</button>
+        </form>
+        <div id="result" style="display:none;">
+            <h2>AI Output</h2>
+            <div id="output"></div>
+        </div>
+    </section>
+    <section id="section-plugins">
+        <div class="plugin-list">
+            <h2>Available Plugins</h2>
+            <ul>
+                <li>Nmap Plugin <span style="color:green;">[Enabled]</span></li>
+                <li>Nikto Plugin <span style="color:green;">[Enabled]</span></li>
+                <li>Example Plugin <span style="color:orange;">[Disabled]</span></li>
+            </ul>
+            <div class="help">Plugin management coming soon.</div>
+        </div>
+    </section>
+    <section id="section-reports">
+        <div class="report-list">
+            <h2>Scan Reports</h2>
+            <ul>
+                <li>report_2025-05-28_1.pdf <span style="color:blue;">[Download]</span></li>
+                <li>report_2025-05-27_2.pdf <span style="color:blue;">[Download]</span></li>
+            </ul>
+            <div class="help">Automated PDF reporting and charts coming soon.</div>
+        </div>
+    </section>
+    <section id="section-notifications">
+        <div class="notification-settings">
+            <h2>Notification Settings</h2>
+            <p>Configure Telegram and Discord notifications for scan results.</p>
+            <div class="help">Notification integration coming soon.</div>
+        </div>
+    </section>
+    <section id="section-monitoring">
+        <div class="monitoring-settings">
+            <h2>Monitoring Mode</h2>
+            <p>Set up continuous scanning of target URLs at specified intervals.</p>
+            <div class="help">Monitoring mode coming soon.</div>
+        </div>
+    </section>
+    <section id="section-settings">
+        <div class="settings-panel">
+            <h2>General Settings</h2>
+            <p>Configure system-wide options for the AI Security Assistant.</p>
+            <div class="help">Settings panel coming soon.</div>
+        </div>
+    </section>
+    <script>
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            // Remove active from all nav links
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            // Show selected section and highlight nav
+            document.getElementById('section-' + section).classList.add('active');
+            document.getElementById('nav-' + section).classList.add('active');
+        }
+        function fillExample() {
+            document.getElementById('instructions').value = "You are an expert ethical hacker and an AI security research assistant. Your primary goal is to identify and exploit vulnerabilities in web applications and networks, focusing on high-impact findings.";
+            document.getElementById('context').value = "Target: https://example.com\nSubdomains found: admin.example.com, api.example.com\nOpen ports on admin.example.com: 80, 443, 8080\nTechnologies detected on example.com: Nginx, WordPress 6.0, PHP 8.1";
+            document.getElementById('goals').value = "Based on the provided data, generate a Python script to test for an IDOR (Insecure Direct Object Reference) vulnerability in the user profile editing functionality. The script should attempt to modify user_id=123 to user_id=124.";
+            document.getElementById('constraints').value = "Output only the executable Python code within a markdown code block. Do not include explanations outside the code block. Ensure the generated code handles common HTTP status codes (200, 302, 403, 500) and prints meaningful output indicating success or failure. Include necessary imports (e.g., requests, bs4, urllib.parse). The generated script should be self-contained and runnable. If the AI determines no immediate vulnerability is apparent, it should propose the next logical steps for a human researcher to take, along with potential reconnaissance scripts.";
+        }
+        document.getElementById('promptForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const data = {
+                instructions: document.getElementById('instructions').value,
+                context: document.getElementById('context').value,
+                goals: document.getElementById('goals').value,
+                constraints: document.getElementById('constraints').value
+            };
+            document.getElementById('output').innerHTML = "Loading...";
+            document.getElementById('result').style.display = "block";
+            const res = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            if (json.output) {
+                // If output is markdown code block, render as code
+                const codeMatch = json.output.match(/```(?:\w+)?\n([\s\S]*?)```/);
+                if (codeMatch) {
+                    document.getElementById('output').innerHTML = '<div class="code-block">' + codeMatch[1] + '</div>';
+                } else {
+                    document.getElementById('output').textContent = json.output;
+                }
+            } else {
+                document.getElementById('output').textContent = "No output received.";
+            }
+        };
+    </script>
+</body>
+</html>
